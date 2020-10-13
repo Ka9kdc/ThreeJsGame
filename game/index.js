@@ -1,4 +1,4 @@
-import {AmbientLight, DirectionalLight, PerspectiveCamera, Scene, WebGLRenderer} from 'three'
+import {AmbientLight, DirectionalLight, MeshStandardMaterial, Mesh, PerspectiveCamera, PlaneGeometry, Scene, WebGLRenderer} from 'three'
 
 const scene = new Scene()
 
@@ -17,6 +17,14 @@ function setLighting() {
     scene.add(directionlight)
 }
 
+const makeGround = () => {
+    const groundGeometry = new PlaneGeometry(20,20)
+    const groundMaterial = new MeshStandardMaterial({color: 0x7cfc00})
+    const ground = new Mesh(groundGeometry, groundMaterial)
+    ground.rotation.x = Math.PI/2
+    scene.add(ground)
+}
+
 
 const render = () => {
     requestAnimationFrame(render)
@@ -25,4 +33,5 @@ const render = () => {
 
 function init() {
     setLighting()
+    makeGround
 }
