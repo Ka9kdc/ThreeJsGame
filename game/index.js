@@ -35,3 +35,5 @@ function init() {
     setLighting()
     makeGround
 }
+
+init()
