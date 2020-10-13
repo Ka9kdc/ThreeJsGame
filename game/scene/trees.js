@@ -24,7 +24,7 @@ export function makeWorldTrees() {
     while(worldTrees.length < 12){
         const newTree = makeTree()
         newTree.position.z = Math.random() * 20 - 10
-        newTree.position.z = Math.random() * 20 - 10
+        newTree.position.x = Math.random() * 20 - 10
         scene.add(newTree)
         worldTrees.push(newTree)
     }
