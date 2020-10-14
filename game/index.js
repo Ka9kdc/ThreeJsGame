@@ -1,14 +1,15 @@
-import {AmbientLight, DirectionalLight, MeshStandardMaterial, Mesh, PerspectiveCamera, PlaneGeometry, Scene, WebGLRenderer} from 'three'
+import {AmbientLight, DirectionalLight, MeshStandardMaterial, Mesh, PerspectiveCamera, PlaneGeometry, Scene, WebGLRenderer, SphereGeometry} from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { makeWorldTrees } from './scene/trees'
-import {makeWorldStars, allStars} from './scene/stars'
+import { makeWorldTrees, worldTrees } from './trees'
+import {makeWorldStars, allStars} from './stars'
+import { starCollision, treeCollision } from './collisionLogic'
 
 export const scene = new Scene()
 
-const camera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, .1, 1000)
+export const camera = new PerspectiveCamera(75, window.innerWidth/window.innerHeight, .1, 1000)
 camera.position.z = 5
 camera.position.y = 2
-camera.lookAt(0,0,0)
+
 const renderer = new WebGLRenderer()
 renderer.setClearColor(0xfffafa, 1)
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -36,10 +37,64 @@ const makeGround = () => {
     scene.add(ground)
 }
 
+export let ball
+const makeBall = () => {
+    const ballGeometry = new SphereGeometry(.25)
+    const ballMaterial = new MeshStandardMaterial({color: 0x0000ff})
+     ball = new Mesh(ballGeometry, ballMaterial)
+     ball.position.y = .25
+    scene.add(ball)
+}
 
+
+window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth/window.innerHeight
+    camera.updateProjectionMatrix()
+})
+
+let changeXPosition = 0
+let changeZPosition = 0
+function checkKey(event){
+    switch(event.key){
+        case 'ArrowRight':
+            changeXPosition = .1
+            changeZPosition = 0
+            break
+        case 'ArrowLeft':
+            changeXPosition = -.1
+            changeZPosition = 0
+            break
+        case 'ArrowDown':
+            changeXPosition = 0
+            changeZPosition = .1
+            break
+        case 'ArrowUp':
+            changeXPosition = 0
+            changeZPosition = -.1
+            break
+        default:
+            changeXPosition = 0
+            changeZPosition = 0
+    }
+}
+
+window.addEventListener('keydown', checkKey)
+window.addEventListener('keyup', () => {
+    changeZPosition = 0
+    changeXPosition = 0
+})
 const render = () => {
     requestAnimationFrame(render)
     allStars.forEach(star => star.rotation.y +=.01)
+    ball.rotation.x += changeXPosition
+    ball.rotation.z += changeZPosition
+    ball.position.x += changeXPosition
+    ball.position.z += changeZPosition
+    camera.position.x += changeXPosition
+    camera.position.z += changeZPosition
+    allStars.forEach(star => starCollision(star))
+    worldTrees.forEach(tree => treeCollision(tree))
     renderer.render(scene, camera)
 }
 
@@ -48,6 +103,8 @@ function init() {
     makeGround()
     makeWorldTrees()
     makeWorldStars()
+    makeBall()
+    camera.lookAt(ball.position)
     render()
 }
 

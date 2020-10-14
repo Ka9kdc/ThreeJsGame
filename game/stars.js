@@ -1,10 +1,10 @@
 import { ExtrudeBufferGeometry, Mesh, MeshStandardMaterial, Shape, ShapeBufferGeometry } from "three"
-import {scene} from '..'
+import {scene} from '.'
 
 
 export const allStars = []
 
- function makeAStar () {
+function makeAStar () {
     const StarShape = new Shape()
     .moveTo(0,3)
     .lineTo(.65,2)

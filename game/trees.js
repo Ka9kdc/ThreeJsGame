@@ -1,5 +1,5 @@
 import { ConeGeometry, CylinderGeometry, Mesh, MeshStandardMaterial, Object3D } from "three"
-import { scene } from ".."
+import { scene } from "."
 
 
 export const worldTrees = []
@@ -9,11 +9,11 @@ function makeTree(){
     const treeTopMaterial = new MeshStandardMaterial({color: 0x143306})
     const treeTop = new Mesh(treeTopGeometry, treeTopMaterial)
     treeTop.castShadow = true;
-    treeTop.position.y = 1.25
-    const treeTrunkGeometry = new CylinderGeometry(.1, .1, .5)
+    treeTop.position.y = 1.5
+    const treeTrunkGeometry = new CylinderGeometry(.1, .1, 1)
     const trunkMaterial = new MeshStandardMaterial({color: 0x886633})
     const treeTrunk = new Mesh(treeTrunkGeometry, trunkMaterial);
-    treeTrunk.position.y = .25
+    treeTrunk.position.y = .5
     const tree = new Object3D()
     tree.add(treeTrunk)
     tree.add(treeTop)
@@ -28,4 +28,12 @@ export function makeWorldTrees() {
         scene.add(newTree)
         worldTrees.push(newTree)
     }
+}
+
+export function addMoreTrees () {
+    const newTree = makeTree()
+    newTree.position.z = Math.random() * 20 - 10
+    newTree.position.x = Math.random() * 20 - 10
+    scene.add(newTree)
+    worldTrees.push(newTree)
 }
