@@ -32,7 +32,6 @@ const makeGround = () => {
     const groundGeometry = new PlaneGeometry(20,20)
     const groundMaterial = new MeshStandardMaterial({color: 0x7cfc00})
     const ground = new Mesh(groundGeometry, groundMaterial)
-    console.log('hello')
     ground.rotation.x = -Math.PI/2
     scene.add(ground)
 }
